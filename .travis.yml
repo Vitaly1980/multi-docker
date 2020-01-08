@@ -4,7 +4,7 @@ services:
 
 
 before_install:
-  - docker build -t vitalyandrienko/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t vitalyandrienko/react-test -f ./client/Docker file.dev ./client
 
 script:
   - docker run vitalyandrienko/react-test npm test -- --coverage
@@ -23,4 +23,17 @@ after-success:
   - docker push vitalyandrienko/multi-nginx
   - docker push vitalyandrienko/multi-server
   - docker push vitalyandrienko/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: eu-central-1
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-eu-central-1-970164270596
+  bucket_path: docker-multi
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: $AWS_SECRET_KEY
   
